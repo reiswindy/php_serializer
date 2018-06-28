@@ -46,7 +46,7 @@ describe PHP do
     object = SimpleTestClass.new
 
     serialized_string = object.to_php_serialized
-    serialized_string.should eq(%(O:15:"SimpleTestClass":3:{s:5:"value";i:25;s:13:"another_value";s:6:"Zapato";s:6:"better";N;}))
+    serialized_string.should eq(%(O:15:"SimpleTestClass":3:{s:6:"better";N;s:5:"value";i:25;s:13:"another_value";s:6:"Zapato";}))
   end
 
   it "serializes objects inside objects correctly" do
@@ -56,7 +56,7 @@ describe PHP do
     simple_object.better = better_object
 
     serialized_string = simple_object.to_php_serialized
-    serialized_string.should eq(%(O:15:"SimpleTestClass":3:{s:5:"value";i:25;s:13:"another_value";s:6:"Zapato";s:6:"better";O:15:"BetterTestClass":2:{s:5:"value";a:1:{i:0;i:50;}s:6:"simple";N;}}))
+    serialized_string.should eq(%(O:15:"SimpleTestClass":3:{s:6:"better";O:15:"BetterTestClass":2:{s:6:"simple";N;s:5:"value";a:1:{i:0;i:50;}}s:5:"value";i:25;s:13:"another_value";s:6:"Zapato";}))
   end 
 
   it "serializes objects with recursive properties correctly" do
@@ -67,7 +67,7 @@ describe PHP do
     better_object.simple = simple_object
 
     serialized_string = simple_object.to_php_serialized
-    serialized_string.should eq(%(O:15:"SimpleTestClass":3:{s:5:"value";i:25;s:13:"another_value";s:6:"Zapato";s:6:"better";O:15:"BetterTestClass":2:{s:5:"value";a:1:{i:0;i:50;}s:6:"simple";r:1;}}))
+    serialized_string.should eq(%(O:15:"SimpleTestClass":3:{s:6:"better";O:15:"BetterTestClass":2:{s:6:"simple";r:1;s:5:"value";a:1:{i:0;i:50;}}s:5:"value";i:25;s:13:"another_value";s:6:"Zapato";}))
   end
 
 end
