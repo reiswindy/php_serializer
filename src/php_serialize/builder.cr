@@ -47,7 +47,7 @@ class PHP::Builder
   end
 
   def array(size : Int32)
-    start_array
+    start_array(size)
     yield.tap { end_array }
   end
 
@@ -78,19 +78,22 @@ class PHP::Builder
     end
 
     if new_object
-      start_object(klass, size)
+      start_object(object.class, size)
       if object.is_a?(Reference)
         @references[object.object_id] = @items_parsed 
       end
       yield.tap { end_object }
     else
-      reference(@references[object.object_id])
+      scalar do
+        item_number = @references[object.object_id]
+        @io << "r:#{item_number};"
+      end
     end
   end
 
   private def start_object(klass : Class, size : Int32)
     start_scalar
-    @state.push(ObjectState.new(valid_size: size, used_size: 0, name: true))
+    @state.push(ObjectState.new(valid_size: size, size_used: 0, name: true))
     @io << %(O:#{klass.to_s.size}:"#{klass.to_s}":#{size}:{)
   end
 
@@ -163,7 +166,7 @@ class PHP::Builder
     when ObjectState
       size_used = state.size_used
       size_used += 1 unless state.name
-      @state[-1] = ArrayState.new(state.valid_size, size_used, !state.name)
+      @state[-1] = ObjectState.new(state.valid_size, size_used, !state.name)
     end
   end
 
@@ -194,12 +197,6 @@ class PHP::Builder
   def float(value : Float)
     scalar do
       @io << "d:#{value};"
-    end
-  end
-
-  def reference(value : Int)
-    scalar do
-      @io << "r:#{value};"
     end
   end
 
