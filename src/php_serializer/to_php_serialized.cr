@@ -80,22 +80,29 @@ end
 
 struct Tuple
   def to_php_serialized(php : PHP::Builder)
-    {% s = 0...T.size %}
-    php.array({{s}}) do
-      {% for i in s %}
-        php.indexed_value({{i}}, self[{{i}}])
+    {% begin %}
+      {% prop = [] of Nil %}
+      {% for i in 0...T.size %}
+        {% prop << i %}
       {% end %}
-    end
+      php.array({{prop.size}}) do
+        {% for i in 0...T.size %}
+          php.indexed_value({{i}}, self[{{i}}])
+        {% end %}
+      end
+    {% end %}
   end
 end
 
 struct NamedTuple
   def to_php_serialized(php : PHP::Builder)
-    {% s = T.keys.size %}
-    php.array({{s}}) do
-      {% for key in T.keys %}
-        php.indexed_value({{key.stringify}}, self[{{key.symbolize}}])
-      {% end %}
-    end
+    {% begin %}
+      {% s = T.keys.size %}
+      php.array({{s}}) do
+        {% for key in T.keys %}
+          php.indexed_value({{key.stringify}}, self[{{key.symbolize}}])
+        {% end %}
+      end
+    {% end %}
   end
 end
