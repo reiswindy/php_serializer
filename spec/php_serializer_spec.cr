@@ -1,11 +1,6 @@
 require "./spec_helper"
 
 describe PHP do
-  # TODO: Write tests for Hash, Tuple, NamedTuple
-
-  it "works" do
-    false.should eq(true)
-  end
 
   it "serializes a string correctly" do
     serialized_string = "AHOY MATEY'S".to_php_serialized
@@ -40,6 +35,21 @@ describe PHP do
   it "serializes slightly more complex arrays correctly" do
     serialized_string = [[[23], "Hi"], true, [] of Int32].to_php_serialized
     serialized_string.should eq(%(a:3:{i:0;a:2:{i:0;a:1:{i:0;i:23;}i:1;s:2:"Hi";}i:1;b:1;i:2;a:0:{}}))
+  end
+
+  it "serializes hashes with string keys and integer keys correctly" do
+    serialized_string = {"value" => 23, 0 => {"key" => "Another value"}, "thingy" => [23]}.to_php_serialized
+    serialized_string.should eq(%(a:3:{s:5:"value";i:23;i:0;a:1:{s:3:"key";s:13:"Another value";}s:6:"thingy";a:1:{i:0;i:23;}}))
+  end
+
+  it "serializes tuples as arrays correctly" do
+    serialized_string = {[34], "This value is bad"}.to_php_serialized
+    serialized_string.should eq(%(a:2:{i:0;a:1:{i:0;i:34;}i:1;s:17:"This value is bad";}))
+  end
+
+  it "serializes named tuples as associative arrays correctly" do
+    serialized_string = {first: [34], second: "This value is bad"}.to_php_serialized
+    serialized_string.should eq(%(a:2:{s:5:"first";a:1:{i:0;i:34;}s:6:"second";s:17:"This value is bad";}))
   end
 
   it "serializes objects correctly" do
