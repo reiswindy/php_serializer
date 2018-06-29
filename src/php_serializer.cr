@@ -1,4 +1,4 @@
-require "./php_serialize/*"
+require "./php_serializer/*"
 
 module PHP
   class Error < Exception

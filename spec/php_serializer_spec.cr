@@ -1,7 +1,7 @@
 require "./spec_helper"
 
 describe PHP do
-  # TODO: Write tests
+  # TODO: Write tests for Hash, Tuple, NamedTuple
 
   it "works" do
     false.should eq(true)

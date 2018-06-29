@@ -1,5 +1,5 @@
 require "spec"
-require "../src/php_serialize"
+require "../src/php_serializer"
 
 class SimpleTestClass
   include PHP::Serializable

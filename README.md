@@ -1,4 +1,4 @@
-# php_serialize
+# php_serializer
 
 TODO: Write a description here
 
@@ -8,14 +8,14 @@ Add this to your application's `shard.yml`:
 
 ```yaml
 dependencies:
-  php_serialize:
-    github: [your-github-name]/php_serialize
+  php_serializer:
+    github: reiswindy/php_serializer
 ```
 
 ## Usage
 
 ```crystal
-require "php_serialize"
+require "php_serializer"
 ```
 
 TODO: Write usage instructions here
@@ -26,7 +26,7 @@ TODO: Write development instructions here
 
 ## Contributing
 
-1. Fork it ( https://github.com/[your-github-name]/php_serialize/fork )
+1. Fork it ( https://github.com/reiswindy/php_serializer/fork )
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
@@ -34,4 +34,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [[your-github-name]](https://github.com/[your-github-name]) reiswindy - creator, maintainer
+- [reiswindy](https://github.com/reiswindy) reiswindy - creator, maintainer
