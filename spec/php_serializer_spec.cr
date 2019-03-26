@@ -79,5 +79,4 @@ describe PHP do
     serialized_string = simple_object.to_php_serialized
     serialized_string.should eq(%(O:15:"SimpleTestClass":3:{s:6:"better";O:15:"BetterTestClass":2:{s:6:"simple";r:1;s:5:"value";a:1:{i:0;i:50;}}s:5:"value";i:25;s:13:"another_value";s:6:"Zapato";}))
   end
-
 end

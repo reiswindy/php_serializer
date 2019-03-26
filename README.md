@@ -34,4 +34,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [reiswindy](https://github.com/reiswindy) reiswindy - creator, maintainer
+- [reiswindy](https://github.com/reiswindy) - creator, maintainer
