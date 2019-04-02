@@ -1,6 +1,9 @@
 require "./php_serializer/**"
 
 module PHP
+  class Error < Exception
+  end
+
   class ParseException < Exception
   end
 

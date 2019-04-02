@@ -1,8 +1,8 @@
 class PHP::Parser
   
   def initialize(input : String | IO)
-      @lexer = PHP::Lexer.new(input)
-      next_token
+    @lexer = PHP::Lexer.new(input)
+    next_token
   end
 
   def parse : Any
