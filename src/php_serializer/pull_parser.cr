@@ -41,7 +41,8 @@ class PHP::PullParser
     when :begin_object
       begin_object
     when :reference
-      # TODO:
+      @kind = :reference
+      @int_value = token.int_value
     else
       unexpected_token
     end
@@ -151,9 +152,12 @@ class PHP::PullParser
     read_next
   end
 
-  def read_next
-    current_kind = @kind
+  def read_reference
+    expect_kind(:reference)
+    @int_value.tap { read_next }
+  end
 
+  def read_next
     case token.type
     when :null
       @kind = :null
@@ -186,9 +190,10 @@ class PHP::PullParser
       @kind = :end_hash_or_object
       unexpected_token unless @object_stack.pop?
       next_token
+    # Cannot parse reference without parsing entire string
     when :reference
       @kind = :reference
-      # TODO:
+      @int_value = token.int_value
       next_token
     when :EOF
       @kind = :EOF

@@ -2,6 +2,7 @@ class PHP::Parser
   
   def initialize(input : String | IO)
     @lexer = PHP::Lexer.new(input)
+    @parsed_values = [] of Any
     next_token
   end
 
@@ -12,14 +13,18 @@ class PHP::Parser
   end
 
   private def parse_hash
-    hash = {} of Int64 | String => Any
     nested_elements = token.nested_elements
+
+    hash = {} of Int64 | String => Any
+    add_to_parsed_array(Any.new(hash))
     
     next_token
     nested_elements.times do
       key = parse_hash_key
       value = parse_value
       hash[key] = value
+
+      add_to_parsed_array(value)
     end
 
     unexpected_token if token.type != :end_hash_or_object
@@ -44,12 +49,15 @@ class PHP::Parser
     object_class_name = token.object_class_name
 
     obj = PHP::Object.new(object_class_name)
-    
+    add_to_parsed_array(Any.new(obj))
+
     next_token
     nested_elements.times do
       key = parse_object_key
       value = parse_value
       obj[key] = value
+
+      add_to_parsed_array(value)
     end
 
     unexpected_token if token.type != :end_hash_or_object
@@ -61,6 +69,16 @@ class PHP::Parser
   private def parse_object_key
     unexpected_token if token.type != :string
     parse_value.as_s
+  end
+
+  private def parse_reference
+    reference_index = token.int_value.to_i - 1
+    invalid_reference if reference_index < 0
+
+    referenced_value = @parsed_values[reference_index]?
+    invalid_reference if !referenced_value
+
+    referenced_value.tap { next_token }
   end
 
   private def parse_value
@@ -81,11 +99,15 @@ class PHP::Parser
       parse_hash
     when :begin_object
       parse_object
-    # when :reference
-    # TODO
+    when :reference
+      parse_reference
     else 
       unexpected_token
     end
+  end
+
+  private def add_to_parsed_array(value)
+    @parsed_values << value
   end
 
   private def expect_type(token_type)
@@ -94,6 +116,10 @@ class PHP::Parser
 
   private def unexpected_token
     raise_error("Unexpected token #{token.type} at #{token.column_number}")
+  end
+
+  private def invalid_reference
+    raise_error("Invalid reference #{token.int_value} at #{token.column_number}")
   end
 
   private def raise_error(msg)

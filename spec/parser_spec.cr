@@ -64,4 +64,18 @@ describe PHP::Parser do
     parser = PHP::Parser.new(%(O:4:"Test":2:{s:4:"attr";s:2:"34";s:4:"test";O:4:"Test":2:{s:4:"attr";s:2:"34";s:4:"test";a:2:{s:7:"created";s:10:"2019-04-02";s:11:"description";s:23:"Happy April Fool's Day!";}}}))
     parser.parse.should eq(expected)
   end
+
+  it "parses nested references" do
+    expected_hash = {} of Int64 | String => PHP::Any
+    expected_hash[0_i64] = PHP::Any.new(expected_hash)
+    expected_hash[1_i64] = PHP::Any.new(23_i64)
+    expected_hash[2_i64] = PHP::Any.new(expected_hash)
+
+    parser = PHP::Parser.new(%(a:3:{i:0;r:1;i:1;i:23;i:2;r:1;}))
+    
+    parsed = parser.parse
+    parsed[0_i64][1_i64].should eq(23)
+    parsed[1_i64].should eq(23)
+    parsed[2_i64][0_i64][1_i64].should eq(23)
+  end
 end

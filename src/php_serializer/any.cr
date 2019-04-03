@@ -1,3 +1,5 @@
+require "./object"
+
 struct PHP::Any
   # Possible serialization types.
   alias Type = Nil | Bool | Int64 | Float64 | String | Hash(String|Int64, PHP::Any) | PHP::Object
@@ -5,6 +7,10 @@ struct PHP::Any
   getter raw : Type
 
   def initialize(@raw : Type)
+  end
+
+  def initialize(any : Any)
+    @raw = any.raw
   end
 
   def size : Int32
