@@ -38,7 +38,7 @@ class PHP::Parser
     when :string
       parse_value.as_s
     when :int
-      parse_value.as_i
+      parse_value.as_i64
     else
       unexpected_token
     end

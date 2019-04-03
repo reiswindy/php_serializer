@@ -12,31 +12,42 @@ dependencies:
     github: reiswindy/php_serializer
 ```
 
-## Usage
+## Interface
+* `PHP.parse(input : String | IO) : PHP::Any`
+* `PHP::Any` holds the parsed value. Use with `.as_nil`, `.as_bool`, `.as_i`, `.as_f`, `.as_s`, `.as_h`, `.as_o`
+* `PHP::Object` holds information about a parsed object
 
+## Usage
 ```crystal
 require "php_serializer"
+```
 
-# Parse string
+### Parse array string
+```crystal
 parsed = PHP.parse(%(a:2:{i:0;i:27;s:5:"Hello";i:1;}))
 
-parsed[0] == 27
-parsed["Hello"] == 1
+parsed[0].as_i       # => 27
+parsed["Hello"].as_i # => 1
+```
 
-# Parse string with references
+### Parse string with references
+```crystal
 parsed = PHP.parse(%(a:3:{i:0;r:1;i:1;i:23;i:2;r:1;}))
 
-parsed[1] == 23
-parsed[0][1] == 23
-parsed[2][0][1] == 23
+parsed[1].as_i       # => 23
+parsed[0][1].as_i    # => 23
+parsed[2][0][1].as_i # => 23
+```
 
-# Parse string object
+### Parse object string
+```crystal
 parsed = PHP.parse(%(O:8:"DateTime":3:{s:4:"date";s:26:"2019-03-30 01:33:48.000000";s:13:"timezone_type";i:3;s:8:"timezone";s:16:"America/New_York";}))
 
-parsed.class_name == "DateTime"
-parsed["date"] == "2019-03-30 01:33:48.000000"
-parsed["timezone_type"] == 3
-parsed["timezone"] == "America/New_York"
+obj = parsed.as_o
+obj.class_name            # => "DateTime"
+obj["date"].as_s          # => "2019-03-30 01:33:48.000000"
+obj["timezone_type"].as_i # => 3
+obj["timezone"].as_s      # => "America/New_York"
 ```
 
 ## Contributing

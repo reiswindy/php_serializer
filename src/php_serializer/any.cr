@@ -62,12 +62,20 @@ struct PHP::Any
     as_bool if @raw.is_a?(Bool)
   end
 
-  def as_i : Int64
+  def as_i : Int32
+    @raw.as(Int).to_i32
+  end
+
+  def as_i? : Int32
+    as_i if @raw.is_a?(Int)
+  end
+
+  def as_i64 : Int64
     @raw.as(Int).to_i64
   end
 
-  def as_i? : Int64?
-    as_i if @raw.is_a?(Int)
+  def as_i64? : Int64?
+    as_i64 if @raw.is_a?(Int)
   end
 
   def as_f : Float64
