@@ -31,8 +31,8 @@ describe PHP::Parser do
 
   it "parses hashes" do
     expected = {} of Int64 | String => PHP::Any
-    expected[0_i64] = PHP::Any.new("date")
-    expected[1_i64] = PHP::Any.new(23_i64)
+    expected[0] = PHP::Any.new("date")
+    expected[1] = PHP::Any.new(23_i64)
 
     parser = PHP::Parser.new(%(a:2:{i:0;s:4:"date";i:1;i:23;}))
     parser.parse.should eq(expected)
@@ -67,15 +67,15 @@ describe PHP::Parser do
 
   it "parses nested references" do
     expected_hash = {} of Int64 | String => PHP::Any
-    expected_hash[0_i64] = PHP::Any.new(expected_hash)
-    expected_hash[1_i64] = PHP::Any.new(23_i64)
-    expected_hash[2_i64] = PHP::Any.new(expected_hash)
+    expected_hash[0] = PHP::Any.new(expected_hash)
+    expected_hash[1] = PHP::Any.new(23_i64)
+    expected_hash[2] = PHP::Any.new(expected_hash)
 
     parser = PHP::Parser.new(%(a:3:{i:0;r:1;i:1;i:23;i:2;r:1;}))
     
     parsed = parser.parse
-    parsed[0_i64][1_i64].should eq(23)
-    parsed[1_i64].should eq(23)
-    parsed[2_i64][0_i64][1_i64].should eq(23)
+    parsed[0][1].should eq(23)
+    parsed[1].should eq(23)
+    parsed[2][0][1].should eq(23)
   end
 end

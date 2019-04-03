@@ -25,7 +25,11 @@ struct PHP::Any
   def [](key : Int | String) : PHP::Any
     case object = @raw
     when Hash
-      PHP::Any.new(object[key])
+      if key.is_a?(Int)
+        PHP::Any.new(object[key.to_i64])
+      else
+        PHP::Any.new(object[key])
+      end
     else
       raise "Expected Hash for #[](key : Int | String), not #{object.class}"
     end
@@ -34,7 +38,11 @@ struct PHP::Any
   def []?(key : Int | String) : PHP::Any?
     case object = @raw
     when Hash
-      PHP::Any.new(object[key]) if object[key]?
+      if key.is_a?(Int)
+        PHP::Any.new(object[key.to_i64]) if object[key.to_i64]?
+      else
+        PHP::Any.new(object[key]) if object[key]?
+      end
     else
       raise "Expected Hash for #[]?(key : Int | String), not #{object.class}"
     end
