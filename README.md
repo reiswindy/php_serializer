@@ -1,6 +1,6 @@
 # php_serializer
 
-Parse PHP serialized strings 
+Parse PHP serialized strings and serialize objects as PHP strings
 
 ## Installation
 
@@ -48,6 +48,19 @@ obj.class_name            # => "DateTime"
 obj["date"].as_s          # => "2019-03-30 01:33:48.000000"
 obj["timezone_type"].as_i # => 3
 obj["timezone"].as_s      # => "America/New_York"
+```
+
+### Make a class serializable
+```crystal
+class Menino
+  include PHP::Serializable
+
+  def initialize(@name : String, @age : Int32)
+  end
+end
+
+menino = Menino.new("Joel", 6)
+menino.to_php_serialized # => "O:6:\"Menino\":2:{s:4:\"name\";s:4:\"Joel\";s:3:\"age\";i:6;}"
 ```
 
 ## Contributing
