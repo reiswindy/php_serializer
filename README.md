@@ -52,15 +52,15 @@ obj["timezone"].as_s      # => "America/New_York"
 
 ### Make a class serializable
 ```crystal
-class Menino
+class Guy
   include PHP::Serializable
 
   def initialize(@name : String, @age : Int32)
   end
 end
 
-menino = Menino.new("Joel", 6)
-menino.to_php_serialized # => "O:6:\"Menino\":2:{s:4:\"name\";s:4:\"Joel\";s:3:\"age\";i:6;}"
+guy = Guy.new("Joel", 26)
+guy.to_php_serialized # => "O:3:\"Guy\":2:{s:4:\"name\";s:4:\"Joel\";s:3:\"age\";i:26;}"
 ```
 
 ## Contributing
